@@ -1,8 +1,16 @@
-import { absoluteURLForAsset, createEntityAndReparent } from "./utils";
+import { absoluteURLForAsset } from "./utils";
 
 export function inflateMediaVideo(node, componentProps, otherComponents) {
   componentProps.src = absoluteURLForAsset(componentProps.src);
-  const el = createEntityAndReparent(node);
+
+  // Create a new entity and copy the position and quaternion of the node.
+  const el = document.createElement("a-entity");
+  el.object3D.position.copy(node.position);
+  el.object3D.quaternion.copy(node.quaternion);
+  el.object3D.scale.copy(node.scale);
+  node.el.sceneEl.appendChild(el);
+  node.removeFromParent();
+
   el.classList.add("mediavideo");
   el.classList.add(node.name); // to view it in the editor
 
